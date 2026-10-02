@@ -31,16 +31,7 @@
   .riga { width: 180px; height: 3px; background: var(--oro); margin: 16px 0 22px; }
   video { width: 100%; max-width: 960px; max-height: 70vh; width: auto; border-radius: 14px; background: #000;
           box-shadow: 0 12px 40px rgba(0,0,0,.45); }
-  .cornice { position: relative; width: fit-content; max-width: 960px; display: flex; justify-content: center; }
-  #grande {
-    position: absolute; left: 14px; bottom: 58px;   /* piccolo, in basso a sinistra sopra i comandi */
-    width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--oro); cursor: pointer;
-    background: rgba(248,244,234,.95); box-shadow: 0 6px 24px rgba(0,0,0,.5);
-    display: flex; align-items: center; justify-content: center;
-  }
-  #grande::after { content: ""; margin-left: 5px; border-style: solid; border-width: 14px 0 14px 23px;
-                   border-color: transparent transparent transparent var(--verde); }
-  #grande[hidden] { display: none; }
+  .cornice { position: relative; width: 100%; max-width: 960px; display: flex; justify-content: center; }
   #guarda { background: var(--oro); color: var(--scuro); font-size: 24px; padding: 16px 34px; }
   .nota { margin-top: 18px; font-size: 19px; text-align: center; max-width: 640px; line-height: 1.5; }
   .nota b { color: var(--oro); }
@@ -59,7 +50,7 @@
   @media (orientation: landscape) and (pointer: coarse), (orientation: landscape) and (max-height: 600px) {
     body { padding: 0; justify-content: center; background: #000; min-height: 100vh; min-height: 100dvh; }
     .alto, h1, .data, .riga, .nota, #fine, #ferma, #guarda { display: none !important; }
-    .cornice { max-width: none; width: 100%; }
+    .cornice { max-width: none; }
     .pulsanti { margin: 0; height: 0; }
     video { width: 100vw; height: 100vh; height: 100dvh; max-width: none; max-height: none;
             border-radius: 0; box-shadow: none; object-fit: contain; }
@@ -75,7 +66,6 @@
   <div class="riga"></div>
   <div class="cornice">
     <video src="viva-la-lute-v4.mp4" poster="copertina.jpg" controls playsinline preload="auto"></video>
-    <button id="grande" type="button" aria-label="Guarda il video"></button>
   </div>
   <p class="nota" id="nota">Le parole scorrono insieme alla musica: basta <b>seguirle</b>!</p>
   <p id="fine">Grazie per aver cantato con noi!<br><b>Viva la LUTE, evviva la vita!</b></p>
@@ -94,17 +84,12 @@
   // ferma: interrompe il video e torna all'immagine iniziale
   function ferma() {
     v.pause(); esciSchermoIntero(); v.currentTime = 0; v.load();
-    document.getElementById("grande").hidden = false;
   }
   document.getElementById("ferma").onclick = ferma;
-  // un tocco su "Guarda il video" o sul grande ▶ al centro fa partire il video
-  const grande = document.getElementById("grande");
+  // un tocco su "Guarda il video" fa partire il video
   function guarda() { v.play().catch(() => {}); }
-  grande.onclick = guarda;
   document.getElementById("guarda").onclick = guarda;
-  v.addEventListener("play", () => { grande.hidden = true; });
-  v.addEventListener("pause", () => { grande.hidden = false; });
-  // prova a partire da solo all'apertura (se il telefono non lo permette, resta il grande ▶)
+  // prova a partire da solo all'apertura (se il telefono non lo permette, resta il ▶ dei comandi)
   window.addEventListener("load", guarda);
   // a fine video: esce da solo dallo schermo intero e mostra il saluto
   v.addEventListener("ended", () => {
